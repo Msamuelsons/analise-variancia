@@ -25,8 +25,6 @@ Hipótese nula (H₀): Não há diferença significativa no tempo médio de perm
 Hipótese alternativa (H₁): Há pelo menos uma diferença significativa no tempo médio de permanência entre as três páginas de destino.
 Calcule a ANOVA:
 
-Utilize uma ferramenta estatística como Python (por exemplo, com a biblioteca scipy) para calcular a ANOVA.
-Interprete os resultados:
 
 Com base no valor p (p-value) da ANOVA, determine se você rejeita ou não a hipótese nula.
 Conclusão:
