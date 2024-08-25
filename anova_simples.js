@@ -1,103 +1,127 @@
-function main () {
+function main() {
+  const tabela = {
+    "A": [5, 7, 8, 4, 9], // tempo de cada user no site 'A'
+    "B": [6, 9, 7, 10, 6], // tempo de cada user no site 'B'
+    "C": [8, 7, 6, 5, 9]  // tempo de cada user no site 'C'
+  };
 
-    const tabela = {
-        "A":[5, 7, 8, 4, 9], // tempo de cada user no site 'A'
-        "B":[6, 9, 7, 10, 6], // tempo de cada user no site 'B'
-        "C":[8, 7, 6, 5, 9] // tempo de cada user no site 'C'
-    }
+  console.table(tabela);
 
-    console.table(tabela);
-    
-    quadrados_fatores(tabela);
-    somatoria_fatores(tabela.A, tabela.B, tabela.C);
-    
-};
+  const quadradosTabela = quadrados_fatores(tabela);
+  const somasTabela = somatoria_fatores(tabela);
+  
+  const SQA = somatoria_quadrada_fatores(somasTabela);
+  medias_quadrado(Object.values(somasTabela));
+  const SQT = soma_quadrado_t(quadradosTabela);
+
+  medias_quadraticas(SQA, SQT);
+}
 
 // O(n)
-function somatoria_fatores(tabelaA, tabelaB, tabelaC) {
-    let soma_tabelaA = 0;
-    let soma_tabelaB = 0;
-    let soma_tabelaC = 0;
+function somatoria_fatores(tabela) {
+  const somas = {
+    A: tabela.A.reduce((acc, val) => acc + val, 0),
+    B: tabela.B.reduce((acc, val) => acc + val, 0),
+    C: tabela.C.reduce((acc, val) => acc + val, 0),
+  };
 
-    tabelaA.forEach(valores => soma_tabelaA += valores);
-    tabelaB.forEach(valores => soma_tabelaB += valores);
-    tabelaC.forEach(valores => soma_tabelaC += valores);
+  const somatoria_total_fatores = somas.A + somas.B + somas.C;
 
-    let somatoria_total_fatores = soma_tabelaA + soma_tabelaB + soma_tabelaC;
-    somatoria_quadrada_fatores(soma_tabelaA , soma_tabelaB , soma_tabelaC);
-    console.log(soma_tabelaA, soma_tabelaB, soma_tabelaC, somatoria_total_fatores)
-};
-
-
+  return somas;
+}
 
 // O(n)
 function quadrados_fatores(tabela) {
-    let t_dobrada = [];
+  const t_dobrada = Object.values(tabela).flat().map(valor => Math.pow(valor, 2));
+  
+  const tamanho_split = 5;
+  const dividir = [];
+  for (let i = 0; i < t_dobrada.length; i += tamanho_split) {
+    dividir.push(t_dobrada.slice(i, i + tamanho_split));
+  }
 
-    Object.values(tabela).forEach(e => {
-        e.forEach(valor => {
-            t_dobrada.push(Math.pow(valor, 2));
-        });
-    })
+  return dividir;
+}
 
-   
+// O(1)
+function somatoria_quadrada_fatores(somas) {
+  const quadrados = {
+    A: Math.pow(somas.A, 2),
+    B: Math.pow(somas.B, 2),
+    C: Math.pow(somas.C, 2),
+  };
 
-    const dividir = [];
-    const tamanho_split = 5;
-    for (let i = 0; i < t_dobrada.length; i+=tamanho_split) {
-        const chunk = t_dobrada.slice(i, i+tamanho_split);
-        dividir.push(chunk);
-    }
-    console.log(dividir);
-    somatoria_quadratica(dividir);
-    return dividir
-};
+  return soma_quadrados(quadrados.A, quadrados.B, quadrados.C);
+}
 
+// O(1)
+function tamanho_valores() {
+  const TAMANHO_A = 5;
+  const TAMANHO_B = 5;
+  const TAMANHO_C = 5;
+  const SOMA_TAMANHO = TAMANHO_A + TAMANHO_B + TAMANHO_C;
+
+  return [TAMANHO_A, TAMANHO_B, TAMANHO_C, SOMA_TAMANHO];
+}
+
+// O(1)
+function soma_quadrados(valA = 0, valB = 0, valC = 0) {
+  const tam_abc = tamanho_valores();
+  return soma_quadrado_fatorA(valA, valB, valC);
+}
 
 // O(n)
-function somatoria_quadratica(tabela_dobrada) {
-    let soma_dobradaA = 0;
-    let soma_dobradaB = 0;
-    let soma_dobradaC = 0;
+function medias_quadrado(lista_medias) {
 
+  const d_medias_somatoria = lista_medias
+    .map(e => Math.pow(e, 2))
+    .reduce((acc, el) => acc + el, 0);
+  
+}
 
-    tabela_dobrada[0].forEach(valores => soma_dobradaA += valores);
-    tabela_dobrada[1].forEach(valores => soma_dobradaB += valores);
-    tabela_dobrada[2].forEach(valores => soma_dobradaC += valores);
+// O(n)
+function soma_quadrado_fatorA(somaA, somaB, somaC) {
+  const n_valores = tamanho_valores();
+  const aux = [somaA, somaB, somaC];
+  
+  const d_medias_somatoria = aux.reduce((acc, el) => acc + el, 0);
 
-    let somatoria_total_fatores = soma_dobradaA + soma_dobradaB + soma_dobradaC;
-    
+  const SQA = (somaA / n_valores[0]) + (somaB / n_valores[1]) + (somaC / n_valores[2]) - (d_medias_somatoria / n_valores[3]).toFixed(3);
+  return SQA;
+}
 
-    console.log(soma_dobradaA, soma_dobradaB, soma_dobradaC, somatoria_total_fatores);
+// O(n)
+function soma_quadrado_t(fatores_quadrado) {
+  const aux = fatores_quadrado.flat();
+  const SOMA_QUADRATICA = parseFloat(792);  
+  const somatoria = aux.reduce((acc, el) => acc + el, 0);
 
-};
+  const n_valores = tamanho_valores();
+  const SQT = somatoria - (SOMA_QUADRATICA / n_valores[3]);
+  return SQT;
+}
 
-function somatoria_quadrada_fatores(somaColunaA, somaColunaB, somaColunaC){
-   let valor_quadrado_colunaA = Math.pow(somaColunaA, 2);
-   let valor_quadrado_colunaB = Math.pow(somaColunaB, 2);
-   let valor_quadrado_colunaC = Math.pow(somaColunaC, 2);
+function medias_quadraticas(SQA, SQT) {
+  let SQTL = 15 - 1; // total de elementos
+  let SQAL = 3 - 1;  // total de observações no caso A, B e C
+  let SQEL = SQTL - SQAL; // erro dos graus de liberdade
+  const SQE = SQT - SQA;
+  const MQA = SQA / SQAL;
+  const MQE = SQE / SQEL;
 
-   console.log(somaColunaA, valor_quadrado_colunaA, somaColunaB, valor_quadrado_colunaB, somaColunaC, valor_quadrado_colunaC);
+  const f = MQA / MQE
 
-   return soma_quadrados(valor_quadrado_colunaA, valor_quadrado_colunaB, valor_quadrado_colunaC);
-};
+  console.log(`SQA: ${SQA}\nSQT:${SQT}\nSQE:${SQE}\nMQE:${MQE}\nMQA:${MQA}`);
 
-function tamanho_valores() {
-    const TAMANHO_A = 5;
-    const TAMANHO_B = 5;
-    const TAMANHO_C = 5;
-    const SOMA_TAMANHO = TAMANHO_A + TAMANHO_B + TAMANHO_C;
+  console.log('Graus de Liberdade')
 
-    return [TAMANHO_A, TAMANHO_B, TAMANHO_C, SOMA_TAMANHO];
-};
+  console.log(`
+    SQT: n-1| ${SQTL}\n
+    SQA: k-1| ${SQAL}\n
+    SQE: n-k| ${SQEL}
 
-function soma_quadrados(valA=0, valB=0, valC=0){
+  `);
+  console.log(`F0: ${f}`);
+}
 
-
-    const tam_abc = tamanho_valores();
-
-    console.log(valA , valB , valC, tam_abc);
-
-    
-};
 main();
